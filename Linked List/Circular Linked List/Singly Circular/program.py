@@ -5,7 +5,7 @@ from platform import node
 class Node:
     def __init__(self, data):
         self.data = data
-        self.link = None
+        self.next = None
         
 class CircularSinglyLinkedList():
     def __init__(self):
@@ -16,97 +16,36 @@ class CircularSinglyLinkedList():
         else:
             node = self.head
             while True:
+                
                 print(node.data, "-->", end = "")
-                node = node.link
+                node = node.next
                 if node == self.head:
                     break
-            print("NULL")
-            print("_____end___")
+            print("\n_____end___")
             
-    def AddBegin(self,data):
-              new_node = Node(data)
-              new_node.link = self.head
-              self.head = new_node
-    def AddEnd(self,data):
-            new_node = Node(data)
-            if self.head is None:
-                self.head = new_node
-                return self.head
-            else:
-                cur = self.head
-                while cur.link is not None:
-                    cur = cur.link
-                cur.link = new_node
-    def AddBetweenNode(self,middle_node,data):
-            """Adding a node after the middle node"""
-            if middle_node is None:
-                print("No middle node")
-                return
-            else:
-                new_node = Node(data)
-                new_node.link = middle_node.link
-                middle_node.link = new_node
-    def AddBetweenValue(self,value,data):
-            """Adding a node after the middle node"""
-            if self.head is None:
-                print("No head node")
-                return
-            else:
-                node = self.head 
-                while node != None:
-                    if node.data == value:
-                        new_node = Node(data)
-                        new_node.link = node.link
-                        node.link = new_node
-                        return
-                    node = node.link
-                print("Not Present")        
-    def DeleteBeginNode(self):
+    def AddNode(self,data):
+        new_node = Node(data)
+        cur = self.head
+        new_node.next = self.head #circular linked list 
+        if self.head is not None:
+            while(cur.next != self.head):
+                cur = cur.next
+            cur.next = new_node
+        else:
+            new_node.next = new_node
+        self.head = new_node
+    def DeleteNode(self):
         if self.head is None: 
             print("No head node")
         else:
-            head  = self.head
-            self.head = head.link
-            head = None
-    def DeleteLastNode(self):
-        if self.head is None:
-            print("No head node")
-        else:
-            node = self.head
-            # print(node1.data)
-            # print(node2.data)
-            while node.link.link is not None:
-                node = node.link
-            node.link = None
-            node = None
-    def DeleteBetween(self, middle_node):
-        '''Delete the node after middle'''
-        if middle_node is None:
-            print("middle node not found")
-        else:
-            to_delete = middle_node.link
-            middle_node.link = to_delete.link
+            cur = self.head
+            while(cur.next.next != self.head):
+               cur = cur.next
+            to_delete =cur.next
+            cur.next = self.head
             to_delete = None
-    def DeleteValue(self, value):
-        '''Delete the first node with the given value'''
-        if self.head is None:
-            print('The list is Empty')
-            return
-        if self.head.data == value:
-            self.DeleteBeginNode()
-            return
-        else:
-            node = self.head
-            while node is not None:
-                if node.data == value:
-                    break
-                prev = node
-                node = node.link
-            if node == None:
-                print("Value not found")
-                return
-            prev.link = node.link
-            node = None
+            
+            
             
                        
         
@@ -124,7 +63,14 @@ class CircularSinglyLinkedList():
       
 ll1 =  CircularSinglyLinkedList()
 ll1.traverse()
-ll1.AddBegin(10)
+ll1.AddNode(10)
+ll1.AddNode(20)
+ll1.AddNode(30)
+ll1.AddNode(40)
+ll1.traverse()
+ll1.DeleteNode()
+ll1.DeleteNode()
+ll1.traverse()
 # ll1.AddBegin(20)
 # ll1.AddBegin(100)
 # ll1.AddBegin(90)
