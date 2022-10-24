@@ -20,17 +20,17 @@ class CircularDoublyLinkedList:
     def AddNode(self, data):
         new_node = Node(data)
         cur = self.head
-        new_node.next = self.head #Condition to be circular
+        new_node.next = self.head
+        new_node.prev = self.head#Condition to be circular
                 #condition to be doubly circular
         
         if self.head is  None: #there is no element
-            new_node.next = new_node #Condition to be circular
+            new_node.next = new_node   #Condition to be circular
             new_node.prev = new_node
         else:
             while(cur.next != self.head):
                 cur = cur.next
-            cur.next = new_node
-            new_node.prev = cur
+            new_node.next = new_node.prev = new_node
         self.head = new_node
 
 l1 = CircularDoublyLinkedList()
@@ -38,6 +38,8 @@ l1.traverse()
 l1.AddNode(30)
 l1.AddNode(40)
 l1.AddNode(50)
+l1.traverse()
+print(l1.head.next.prev.data)
 l1.traverse()
 
 
