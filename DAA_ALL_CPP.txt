@@ -1,0 +1,893 @@
+Binary Search 
+
+include<iostream>
+include<algorithm>
+ using namespace std;
+int binarySearch(int arr[],int key,int low,int end)
+{
+if(low<=end)
+{
+int mid=low +(end-low)/2; if(arr[mid]==key)
+{
+return mid;
+}
+if(arr[mid]>key)
+{
+
+return binarySearch(arr,key,low,mid-1);
+}
+
+return binarySearch(arr,key,mid+1,end);
+
+}
+
+return -1;
+}
+
+int main()
+{
+//taking size as input cout<<"Size of array"<<endl; int size;
+cin>>size; int arr[size];
+cout<<"elements of array"<<endl; for(int i=0;i<size;i++)
+{
+cin>>arr[i];
+}
+cout<<"enter key which you want to search"<<endl; int key;
+cin>>key;
+
+sort(arr,arr+size);
+int result=binarySearch(arr,key, 0,size-1);
+
+if(result== -1)
+{
+cout<<"element not found"<<endl;
+}
+
+else{
+cout<<"element found"<<endl;
+}
+return 0;
+
+}
+Merge Sort
+#include<iostream>
+using namespace std;
+void swapping(int &a, int &b) {     //swap the content of a and b
+   int temp;
+   temp = a;
+   a = b;
+   b = temp;
+}
+void display(int *array, int size) {
+   for(int i = 0; i<size; i++)
+      cout << array[i] << " ";
+   cout << endl;
+}
+void merge(int *array, int l, int m, int r) {
+   int i, j, k, nl, nr;
+   //size of left and right sub-arrays
+   nl = m-l+1; nr = r-m;
+   int larr[nl], rarr[nr];
+   //fill left and right sub-arrays
+   for(i = 0; i<nl; i++)
+      larr[i] = array[l+i];
+   for(j = 0; j<nr; j++)
+      rarr[j] = array[m+1+j];
+   i = 0; j = 0; k = l;
+   //marge temp arrays to real array
+   while(i < nl && j<nr) {
+      if(larr[i] <= rarr[j]) {
+         array[k] = larr[i];
+         i++;
+      }else{
+         array[k] = rarr[j];
+         j++;
+      }
+      k++;
+   }
+   while(i<nl) {       //extra element in left array
+      array[k] = larr[i];
+      i++; k++;
+   }
+   while(j<nr) {     //extra element in right array
+      array[k] = rarr[j];
+      j++; k++;
+   }
+}
+void mergeSort(int *array, int l, int r) {
+   int m;
+   if(l < r) {
+      int m = l+(r-l)/2;
+      // Sort first and second arrays
+      mergeSort(array, l, m);
+      mergeSort(array, m+1, r);
+      merge(array, l, m, r);
+   }
+}
+int main() {
+   int n;
+   cout << "Enter the number of elements: ";
+   cin >> n;
+   int arr[n];     //create an array with given number of elements
+   cout << "Enter elements:" << endl;
+   for(int i = 0; i<n; i++) {
+      cin >> arr[i];
+   }
+   cout << "Array before Sorting: ";
+   display(arr, n);
+   mergeSort(arr, 0, n-1);     //(n-1) for last index
+   cout << "Array after Sorting: ";
+   display(arr, n);
+}
+Quick Sort
+#include <iostream>
+using namespace std;
+ 
+int partition(int arr[], int start, int end)
+{
+ 
+    int pivot = arr[start];
+ 
+    int count = 0;
+    for (int i = start + 1; i <= end; i++) {
+        if (arr[i] <= pivot)
+            count++;
+    }
+ 
+    // Giving pivot element its correct position
+    int pivotIndex = start + count;
+    swap(arr[pivotIndex], arr[start]);
+ 
+    // Sorting left and right parts of the pivot element
+    int i = start, j = end;
+ 
+    while (i < pivotIndex && j > pivotIndex) {
+ 
+        while (arr[i] <= pivot) {
+            i++;
+        }
+ 
+        while (arr[j] > pivot) {
+            j--;
+        }
+ 
+        if (i < pivotIndex && j > pivotIndex) {
+            swap(arr[i++], arr[j--]);
+        }
+    }
+ 
+    return pivotIndex;
+}
+ 
+void quickSort(int arr[], int start, int end)
+{
+ 
+    // base case
+    if (start >= end)
+        return;
+ 
+    // partitioning the array
+    int p = partition(arr, start, end);
+ 
+    // Sorting the left part
+    quickSort(arr, start, p - 1);
+ 
+    // Sorting the right part
+    quickSort(arr, p + 1, end);
+}
+ 
+int main()
+{
+ 
+    int arr[] = { 9, 3, 4, 2, 1, 8 };
+    int n = 6;
+ 
+    quickSort(arr, 0, n - 1);
+ 
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+ 
+    return 0;
+}
+Floyd Warshall
+#include <bits/stdc++.h>
+using namespace std;
+ 
+// Number of vertices in the graph
+#define V 4
+ 
+/* Define Infinite as a large enough
+value.This value will be used for
+vertices not connected to each other */
+#define INF 99999
+ 
+// A function to print the solution matrix
+void printSolution(int dist[][V]);
+ 
+// Solves the all-pairs shortest path
+// problem using Floyd Warshall algorithm
+void floydWarshall(int dist[][V])
+{
+     
+    int i, j, k;
+ 
+    /* Add all vertices one by one to
+    the set of intermediate vertices.
+    ---> Before start of an iteration,
+    we have shortest distances between all
+    pairs of vertices such that the
+    shortest distances consider only the
+    vertices in set {0, 1, 2, .. k-1} as
+    intermediate vertices.
+    ----> After the end of an iteration,
+    vertex no. k is added to the set of
+    intermediate vertices and the set becomes {0, 1, 2, ..
+    k} */
+    for (k = 0; k < V; k++) {
+        // Pick all vertices as source one by one
+        for (i = 0; i < V; i++) {
+            // Pick all vertices as destination for the
+            // above picked source
+            for (j = 0; j < V; j++) {
+                // If vertex k is on the shortest path from
+                // i to j, then update the value of
+                // dist[i][j]
+                if (dist[i][j] > (dist[i][k] + dist[k][j])
+                    && (dist[k][j] != INF
+                        && dist[i][k] != INF))
+                    dist[i][j] = dist[i][k] + dist[k][j];
+            }
+        }
+    }
+ 
+    // Print the shortest distance matrix
+    printSolution(dist);
+}
+ 
+/* A utility function to print solution */
+void printSolution(int dist[][V])
+{
+    cout << "The following matrix shows the shortest "
+            "distances"
+            " between every pair of vertices \n";
+    for (int i = 0; i < V; i++) {
+        for (int j = 0; j < V; j++) {
+            if (dist[i][j] == INF)
+                cout << "INF"
+                     << " ";
+            else
+                cout << dist[i][j] << "   ";
+        }
+        cout << endl;
+    }
+}
+ 
+// Driver's code
+int main()
+{
+    /* Let us create the following weighted graph
+            10
+    (0)------->(3)
+        |     /|\
+    5 |     |
+        |     | 1
+    \|/     |
+    (1)------->(2)
+            3     */
+    int graph[V][V] = { { 0, 5, INF, 10 },
+                        { INF, 0, 3, INF },
+                        { INF, INF, 0, 1 },
+                        { INF, INF, INF, 0 } };
+ 
+    // Function call
+    floydWarshall(graph);
+    return 0;
+}
+Knapsack problem
+
+// C++ program to solve fractional
+// Knapsack Problem
+#include <bits/stdc++.h>
+
+using namespace std;
+
+// Structure for an item which stores
+// weight & corresponding value of Item
+struct Item {
+	int value, weight;
+
+	// Constructor
+	Item(int value, int weight)
+		: value(value), weight(weight)
+	{
+	}
+};
+
+// Comparison function to sort Item
+// according to val/weight ratio
+bool cmp(struct Item a, struct Item b)
+{
+	double r1 = (double)a.value / a.weight;
+	double r2 = (double)b.value / b.weight;
+	return r1 > r2;
+}
+
+// Main greedy function to solve problem
+double fractionalKnapsack(struct Item arr[],
+						int N, int size)
+{
+	// Sort Item on basis of ratio
+	sort(arr, arr + size, cmp);
+
+	// Current weight in knapsack
+	int curWeight = 0;
+
+	// Result (value in Knapsack)
+	double finalvalue = 0.0;
+
+	// Looping through all Items
+	for (int i = 0; i < size; i++) {
+
+		// If adding Item won't overflow,
+		// add it completely
+		if (curWeight + arr[i].weight <= N) {
+			curWeight += arr[i].weight;
+			finalvalue += arr[i].value;
+		}
+
+		// If we can't add current Item,
+		// add fractional part of it
+		else {
+			int remain = N - curWeight;
+			finalvalue += arr[i].value
+						* ((double)remain
+							/ arr[i].weight);
+
+			break;
+		}
+	}
+
+	// Returning final value
+	return finalvalue;
+}
+
+// Driver Code
+int main()
+{
+	// Weight of knapsack
+	int N = 60;
+
+	// Given weights and values as a pairs
+	Item arr[] = { { 100, 10 },
+				{ 280, 40 },
+				{ 120, 20 },
+				{ 120, 24 } };
+
+	int size = sizeof(arr) / sizeof(arr[0]);
+
+	// Function Call
+	cout << "Maximum profit earned = "
+		<< fractionalKnapsack(arr, N, size);
+	return 0;
+}
+0/1 Knapsack problem Dynamic programming
+#include <bits/stdc++.h>
+using namespace std;
+ 
+// A utility function that returns
+// maximum of two integers
+int max(int a, int b) { return (a > b) ? a : b; }
+ 
+// Returns the maximum value that
+// can be put in a knapsack of capacity W
+int knapSack(int W, int wt[], int val[], int n)
+{
+ 
+    // Base Case
+    if (n == 0 || W == 0)
+        return 0;
+ 
+    // If weight of the nth item is more
+    // than Knapsack capacity W, then
+    // this item cannot be included
+    // in the optimal solution
+    if (wt[n - 1] > W)
+        return knapSack(W, wt, val, n - 1);
+ 
+    // Return the maximum of two cases:
+    // (1) nth item included
+    // (2) not included
+    else
+        return max(
+            val[n - 1]
+                + knapSack(W - wt[n - 1], wt, val, n - 1),
+            knapSack(W, wt, val, n - 1));
+} 
+// Driver code
+int main()
+{
+    int val[] = { 60, 100, 120 };
+    int wt[] = { 10, 20, 30 };
+    int W = 50;
+    int n = sizeof(val) / sizeof(val[0]);
+    cout << knapSack(W, wt, val, n);
+    return 0;
+}
+0/1 Knapsack problem Back tracking 
+// CPP code for Dynamic Programming based
+// solution for 0-1 Knapsack problem
+#include <bits/stdc++.h>
+#include <iostream>
+using namespace std;
+
+// A utility function that returns maximum of two integers
+int max(int a, int b) { return (a > b) ? a : b; }
+
+// Prints the items which are put in a knapsack of capacity W
+void printknapSack(int W, int wt[], int val[], int n)
+{
+	int i, w;
+	int K[n + 1][W + 1];
+
+	// Build table K[][] in bottom up manner
+	for (i = 0; i <= n; i++) {
+		for (w = 0; w <= W; w++) {
+			if (i == 0 || w == 0)
+				K[i][w] = 0;
+			else if (wt[i - 1] <= w)
+				K[i][w] = max(val[i - 1] +
+					K[i - 1][w - wt[i - 1]], K[i - 1][w]);
+			else
+				K[i][w] = K[i - 1][w];
+		}
+	}
+
+	// stores the result of Knapsack
+	int res = K[n][W];
+	cout<< res << endl;
+	
+	w = W;
+	for (i = n; i > 0 && res > 0; i--) {
+		
+		// either the result comes from the top
+		// (K[i-1][w]) or from (val[i-1] + K[i-1]
+		// [w-wt[i-1]]) as in Knapsack table. If
+		// it comes from the latter one/ it means
+		// the item is included.
+		if (res == K[i - 1][w])
+			continue;
+		else {
+
+			// This item is included.
+			cout<<" "<<wt[i - 1] ;
+			
+			// Since this weight is included its
+			// value is deducted
+			res = res - val[i - 1];
+			w = w - wt[i - 1];
+		}
+	}
+}
+
+// Driver code
+int main()
+{
+	int val[] = { 60, 100, 120 };
+	int wt[] = { 10, 20, 30 };
+	int W = 50;
+	int n = sizeof(val) / sizeof(val[0]);
+	
+	printknapSack(W, wt, val, n);
+	
+	return 0;
+}
+
+// this code is contributed by shivanisinghss2110
+0/1 Knapsack problem Branch and bound
+// C++ program to solve knapsack problem using
+// branch and bound
+#include <bits/stdc++.h>
+using namespace std;
+
+// Structure for Item which store weight and corresponding
+// value of Item
+struct Item
+{
+	float weight;
+	int value;
+};
+
+// Node structure to store information of decision
+// tree
+struct Node
+{
+	// level --> Level of node in decision tree (or index
+	//			 in arr[]
+	// profit --> Profit of nodes on path from root to this
+	//		 node (including this node)
+	// bound ---> Upper bound of maximum profit in subtree
+	//		 of this node/
+	int level, profit, bound;
+	float weight;
+};
+
+// Comparison function to sort Item according to
+// val/weight ratio
+bool cmp(Item a, Item b)
+{
+	double r1 = (double)a.value / a.weight;
+	double r2 = (double)b.value / b.weight;
+	return r1 > r2;
+}
+
+// Returns bound of profit in subtree rooted with u.
+// This function mainly uses Greedy solution to find
+// an upper bound on maximum profit.
+int bound(Node u, int n, int W, Item arr[])
+{
+	// if weight overcomes the knapsack capacity, return
+	// 0 as expected bound
+	if (u.weight >= W)
+		return 0;
+
+	// initialize bound on profit by current profit
+	int profit_bound = u.profit;
+
+	// start including items from index 1 more to current
+	// item index
+	int j = u.level + 1;
+	int totweight = u.weight;
+
+	// checking index condition and knapsack capacity
+	// condition
+	while ((j < n) && (totweight + arr[j].weight <= W))
+	{
+		totweight += arr[j].weight;
+		profit_bound += arr[j].value;
+		j++;
+	}
+
+	// If k is not n, include last item partially for
+	// upper bound on profit
+	if (j < n)
+		profit_bound += (W - totweight) * arr[j].value /
+										arr[j].weight;
+
+	return profit_bound;
+}
+
+// Returns maximum profit we can get with capacity W
+int knapsack(int W, Item arr[], int n)
+{
+	// sorting Item on basis of value per unit
+	// weight.
+	sort(arr, arr + n, cmp);
+
+	// make a queue for traversing the node
+	queue<Node> Q;
+	Node u, v;
+
+	// dummy node at starting
+	u.level = -1;
+	u.profit = u.weight = 0;
+	Q.push(u);
+
+	// One by one extract an item from decision tree
+	// compute profit of all children of extracted item
+	// and keep saving maxProfit
+	int maxProfit = 0;
+	while (!Q.empty())
+	{
+		// Dequeue a node
+		u = Q.front();
+		Q.pop();
+
+		// If it is starting node, assign level 0
+		if (u.level == -1)
+			v.level = 0;
+
+		// If there is nothing on next level
+		if (u.level == n-1)
+			continue;
+
+		// Else if not last node, then increment level,
+		// and compute profit of children nodes.
+		v.level = u.level + 1;
+
+		// Taking current level's item add current
+		// level's weight and value to node u's
+		// weight and value
+		v.weight = u.weight + arr[v.level].weight;
+		v.profit = u.profit + arr[v.level].value;
+
+		// If cumulated weight is less than W and
+		// profit is greater than previous profit,
+		// update maxprofit
+		if (v.weight <= W && v.profit > maxProfit)
+			maxProfit = v.profit;
+
+		// Get the upper bound on profit to decide
+		// whether to add v to Q or not.
+		v.bound = bound(v, n, W, arr);
+
+		// If bound value is greater than profit,
+		// then only push into queue for further
+		// consideration
+		if (v.bound > maxProfit)
+			Q.push(v);
+
+		// Do the same thing, but Without taking
+		// the item in knapsack
+		v.weight = u.weight;
+		v.profit = u.profit;
+		v.bound = bound(v, n, W, arr);
+		if (v.bound > maxProfit)
+			Q.push(v);
+	}
+
+	return maxProfit;
+}
+
+// driver program to test above function
+int main()
+{
+	int W = 10; // Weight of knapsack
+	Item arr[] = {{2, 40}, {3.14, 50}, {1.98, 100},
+				{5, 95}, {3, 30}};
+	int n = sizeof(arr) / sizeof(arr[0]);
+
+	cout << "Maximum possible profit = "
+		<< knapsack(W, arr, n);
+
+	return 0;
+}
+N- queen Problem using Back tracking method
+#include <bits/stdc++.h>
+#define N 4
+using namespace std;
+
+void printSolution(int board[N][N])
+{
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++)
+            cout << " " << board[i][j] << " ";
+        printf("\n");
+    }
+}
+  
+bool isSafe(int board[N][N], int row, int col)
+{
+    int i, j;
+  
+    for (i = 0; i < col; i++)
+        if (board[row][i])
+            return false;
+  
+    for (i = row, j = col; i >= 0 && j >= 0; i--, j--)
+        if (board[i][j])
+            return false;
+  
+    for (i = row, j = col; j >= 0 && i < N; i++, j--)
+        if (board[i][j])
+            return false;
+  
+    return true;
+}
+  
+bool solveNQUtil(int board[N][N], int col)
+{
+
+    if (col >= N)
+        return true;
+  
+    for (int i = 0; i < N; i++) {
+        if (isSafe(board, i, col)) {
+            board[i][col] = 1;
+  
+            if (solveNQUtil(board, col + 1))
+                return true;
+
+            board[i][col] = 0;
+        }
+    }
+
+    return false;
+}
+  
+bool solveNQ()
+{
+    int board[N][N] = { { 0, 0, 0, 0 },
+                        { 0, 0, 0, 0 },
+                        { 0, 0, 0, 0 },
+                        { 0, 0, 0, 0 } };
+  
+    if (solveNQUtil(board, 0) == false) {
+        cout << "Solution does not exist";
+        return false;
+    }
+  
+    printSolution(board);
+    return true;
+}
+
+int main()
+{
+    solveNQ();
+    return 0;
+}
+Subset of a given set
+#include <bits/stdc++.h>
+using namespace std;
+
+bool** dp;
+
+void display(const vector<int>& v)
+{
+	for (int i = 0; i < v.size(); ++i)
+		printf("%d ", v[i]);
+	printf("\n");
+}
+
+void printSubsetsRec(int arr[], int i, int sum, vector<int>& p)
+{
+	if (i == 0 && sum != 0 && dp[0][sum])
+	{
+		p.push_back(arr[i]);
+		if (arr[i] == sum)
+			display(p);
+		return;
+	}
+
+	if (i == 0 && sum == 0)
+	{
+		display(p);
+		return;
+	}
+
+	if (dp[i-1][sum])
+	{
+		vector<int> b = p;
+		printSubsetsRec(arr, i-1, sum, b);
+	}
+
+	if (sum >= arr[i] && dp[i-1][sum-arr[i]])
+	{
+		p.push_back(arr[i]);
+		printSubsetsRec(arr, i-1, sum-arr[i], p);
+	}
+}
+
+void printAllSubsets(int arr[], int n, int sum)
+{
+	if (n == 0 || sum < 0)
+	return;
+
+	dp = new bool*[n];
+	for (int i=0; i<n; ++i)
+	{
+		dp[i] = new bool[sum + 1];
+		dp[i][0] = true;
+	}
+
+	if (arr[0] <= sum)
+	dp[0][arr[0]] = true;
+
+	for (int i = 1; i < n; ++i)
+		for (int j = 0; j < sum + 1; ++j)
+			dp[i][j] = (arr[i] <= j) ? dp[i-1][j] ||
+									dp[i-1][j-arr[i]]
+									: dp[i - 1][j];
+	if (dp[n-1][sum] == false)
+	{
+		printf("There are no subsets with sum %d\n", sum);
+		return;
+	}
+
+	vector<int> p;
+	printSubsetsRec(arr, n-1, sum, p);
+}
+
+int main()
+{
+	int arr[] = {1, 2, 5, 6, 8};
+	int n = sizeof(arr)/sizeof(arr[0]);
+	int sum = 9;
+	printAllSubsets(arr, n, sum);
+	return 0;
+}
+TSP DP
+#include <iostream>
+using namespace std;
+
+const int n = 4;
+
+const int MAX = 1000000;
+
+int dist[n + 1][n + 1] = {
+	{ 0, 0, 0, 0, 0 }, { 0, 0, 10, 15, 20 },
+	{ 0, 10, 0, 25, 25 }, { 0, 15, 25, 0, 30 },
+	{ 0, 20, 25, 30, 0 },
+};
+
+int memo[n + 1][1 << (n + 1)];
+
+int fun(int i, int mask)
+{
+
+	if (mask == ((1 << i) | 3))
+		return dist[1][i];
+	if (memo[i][mask] != 0)
+		return memo[i][mask];
+
+	int res = MAX; 
+
+	for (int j = 1; j <= n; j++)
+		if ((mask & (1 << j)) && j != i && j != 1)
+			res = std::min(res, fun(j, mask & (~(1 << i)))
+									+ dist[j][i]);
+	return memo[i][mask] = res;
+}
+
+int main()
+{
+	int ans = MAX;
+	for (int i = 1; i <= n; i++)
+		ans = std::min(ans, fun(i, (1 << (n + 1)) - 1)
+								+ dist[i][1]);
+
+	printf("The cost of most efficient tour = %d", ans);
+
+	return 0;
+}
+TSP Backtracking
+https://onlinegdb.com/9mrwln_GfK
+
+#include <bits/stdc++.h>
+using namespace std;
+#define V 4
+
+void tsp(int graph[][V], vector<bool>& v, int currPos,
+        int n, int count, int cost, int& ans)
+{
+
+    if (count == n && graph[currPos][0]) {
+        ans = min(ans, cost + graph[currPos][0]);
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (!v[i] && graph[currPos][i]) {
+
+        
+            v[i] = true;
+            tsp(graph, v, i, n, count + 1,
+                cost + graph[currPos][i], ans);
+            v[i] = false;
+        }
+    }
+};
+
+int main()
+{
+
+    int n = 4;
+
+    int graph[][V] = {
+        { 0, 10, 15, 20 },
+        { 10, 0, 35, 25 },
+        { 15, 35, 0, 30 },
+        { 20, 25, 30, 0 }
+    };
+
+    vector<bool> v(n);
+    for (int i = 0; i < n; i++)
+        v[i] = false;
+
+    v[0] = true;
+    int ans = INT_MAX;
+    tsp(graph, v, 0, n, 1, 0, ans);
+    cout << ans;
+    return 0;
+}
+
